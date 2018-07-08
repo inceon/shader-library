@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+
+<script id="vertexShader" type="x-shaider/x-vertex">
+    uniform float time;
+    uniform vec2 resolution;
+    uniform vec2 u_mouse;
+    void main() {
+        gl_Position = vec4(position, 1.0);
+    }
+</script>
+
+<script id="fragmentShader" type="x-shaider/x-fragment">
+    uniform float time;
+    uniform vec2 resolution;
+    uniform vec2 u_mouse;
+    uniform sampler2D texture;
+    uniform float coeff;
+
+    void main() {
+        vec2 pos = gl_FragCoord.xy / resolution.xy;
+
+        vec3 initImage = texture2D(texture, pos).rgb;
+
+        pos.x += u_mouse.x/100. + sin(time / 500.)/200.;
+        pos.y += u_mouse.y/100. + sin(time / 300.)/300.;
+        vec3 sinImage = texture2D(texture, pos).rgb;
+
+        gl_FragColor = vec4(initImage + sinImage * 0.6, 1.);
+    }
+</script>
+
+<script src="libs/three.min.js"></script>
+<script src="libs/OrbitControls.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
