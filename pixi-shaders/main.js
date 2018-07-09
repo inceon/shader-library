@@ -15,7 +15,7 @@ app.stage.addChild(imageBG);
 
 app.stop();
 
-PIXI.loader.add('shader', '/shaders/shader.frag')
+PIXI.loader.add('shader', 'shaders/shader.frag')
             .load(onLoaded);
 let filter;
 function onLoaded(loader, res) {
