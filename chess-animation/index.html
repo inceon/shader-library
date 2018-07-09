@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+
+<script id="vertexShader" type="x-shaider/x-vertex">
+    uniform float time;
+    uniform vec2 resolution;
+    uniform vec2 u_mouse;
+    void main() {
+        gl_Position = vec4(position, 1.0);
+    }
+</script>
+
+<script id="fragmentShader" type="x-shaider/x-fragment">
+    uniform float time;
+    uniform vec2 resolution;
+    uniform vec2 u_mouse;
+    uniform sampler2D texture;
+    uniform float coeff;
+
+    void main() {
+        vec2 pos = gl_FragCoord.xy / resolution.xy;
+
+        vec3 image = texture2D(texture, pos).rgb;
+
+        vec3 image1 = image - (step(0.25-coeff, pos.x) * image);
+        vec3 image2 = (step(0.25, pos.x) * image) - (step(0.5-coeff, pos.x) * image);
+        vec3 image3 = (step(0.5, pos.x) * image) - (step(0.75-coeff, pos.x) * image);
+        vec3 image4 = (step(0.75, pos.x) * image)- (step(1.-coeff, pos.x) * image);
+
+        vec3 resImage = image1+image2+image3+image4;
+
+        gl_FragColor = vec4(resImage, 1.);
+    }
+</script>
+
+<script src="libs/three.min.js"></script>
+<script src="libs/TweenLite.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
