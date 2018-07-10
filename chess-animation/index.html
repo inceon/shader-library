@@ -34,12 +34,38 @@
 
         vec3 image = texture2D(texture, pos).rgb;
 
-        vec3 image1 = image - (step(0.25-coeff, pos.x) * image);
-        vec3 image2 = (step(0.25, pos.x) * image) - (step(0.5-coeff, pos.x) * image);
-        vec3 image3 = (step(0.5, pos.x) * image) - (step(0.75-coeff, pos.x) * image);
-        vec3 image4 = (step(0.75, pos.x) * image)- (step(1.-coeff, pos.x) * image);
+        vec3 column1 = image - (step(0.25-coeff, pos.x) * image);
+        vec3 column2 = (step(0.25, pos.x) * image) - (step(0.5-coeff, pos.x) * image);
+        vec3 column3 = (step(0.5, pos.x) * image) - (step(0.75-coeff, pos.x) * image);
+        vec3 column4 = (step(0.75, pos.x) * image)- (step(1.-coeff, pos.x) * image);
 
-        vec3 resImage = image1+image2+image3+image4;
+        vec3 column1p = (step(coeff, pos.x) * image) - (step(0.25, pos.x) * image);
+        vec3 column2p = (step(0.25+coeff, pos.x) * image) - (step(0.5, pos.x) * image);
+        vec3 column3p = (step(0.5+coeff, pos.x) * image) - (step(0.75, pos.x) * image);
+        vec3 column4p = (step(0.75+coeff, pos.x) * image)- (step(1., pos.x) * image);
+
+        vec3 image11 = column1 - (step(0.25, pos.y) * column1);
+        vec3 image12 = (step(0.25, pos.y) * column1p) - (step(0.5, pos.y) * column1p);
+        vec3 image13 = (step(0.5, pos.y) * column1) - (step(0.75, pos.y) * column1);
+        vec3 image14 = (step(0.75, pos.y) * column1p) - (step(1., pos.y) * column1p);
+
+        vec3 image21 = column2 - (step(0.25, pos.y) * column2);
+        vec3 image22 = (step(0.25, pos.y) * column2p) - (step(0.5, pos.y) * column2p);
+        vec3 image23 = (step(0.5, pos.y) * column2) - (step(0.75, pos.y) * column2);
+        vec3 image24 = (step(0.75, pos.y) * column2p) - (step(1., pos.y) * column2p);
+
+        vec3 image31 = column3 - (step(0.25, pos.y) * column3);
+        vec3 image32 = (step(0.25, pos.y) * column3p) - (step(0.5, pos.y) * column3p);
+        vec3 image33 = (step(0.5, pos.y) * column3) - (step(0.75, pos.y) * column3);
+        vec3 image34 = (step(0.75, pos.y) * column3p) - (step(1., pos.y) * column3p);
+
+        vec3 image41 = column4 - (step(0.25, pos.y) * column4);
+        vec3 image42 = (step(0.25, pos.y) * column4p) - (step(0.5, pos.y) * column4p);
+        vec3 image43 = (step(0.5, pos.y) * column4) - (step(0.75, pos.y) * column4);
+        vec3 image44 = (step(0.75, pos.y) * column4p) - (step(1., pos.y) * column4p);
+
+        vec3 resImage = image11+image12+image13+image14+image21+image22+image23+image24
+                        +image31+image32+image33+image34+image41+image42+image43+image44;
 
         gl_FragColor = vec4(resImage, 1.);
     }

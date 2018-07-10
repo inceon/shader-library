@@ -41,12 +41,14 @@ function init() {
     plane = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 2.1), material);
     scene.add(plane);
 
-    TweenLite.to(material.uniforms.coeff, 3, {
-        value: 0.25
-    });
-
     resize();
 }
+
+window.addEventListener('click', () => {
+    TweenLite.to(material.uniforms.coeff, 2, {
+        value: 0.25
+    });
+});
 
 window.addEventListener('resize', resize);
 function resize() {
