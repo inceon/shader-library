@@ -45,8 +45,14 @@ function init() {
 }
 
 window.addEventListener('click', () => {
-    TweenLite.to(material.uniforms.coeff, 2, {
-        value: 0.25
+    TweenLite.to(material.uniforms.coeff, 1, {
+        value: 0.25,
+        onComplete: () => {
+            material.uniforms.texture.value = textures[++currentImage%textures.length];
+            TweenLite.to(material.uniforms.coeff, 1.5, {
+                value: 0
+            });
+        }
     });
 });
 

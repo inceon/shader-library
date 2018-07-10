@@ -29,40 +29,48 @@
     uniform sampler2D texture;
     uniform float coeff;
 
+    vec3 getColumn(float start, float end, vec3 inputImage, vec2 pos) {
+        return (step(start, pos.x) * inputImage) - (step(end, pos.x) * inputImage);
+    }
+
+    vec3 getCell(float start, float end, vec3 column, vec2 pos) {
+        return (step(start, pos.y) * column) - (step(end, pos.y) * column);
+    }
+
     void main() {
         vec2 pos = gl_FragCoord.xy / resolution.xy;
 
         vec3 image = texture2D(texture, pos).rgb;
 
-        vec3 column1 = image - (step(0.25-coeff, pos.x) * image);
-        vec3 column2 = (step(0.25, pos.x) * image) - (step(0.5-coeff, pos.x) * image);
-        vec3 column3 = (step(0.5, pos.x) * image) - (step(0.75-coeff, pos.x) * image);
-        vec3 column4 = (step(0.75, pos.x) * image)- (step(1.-coeff, pos.x) * image);
+        vec3 column1 = getColumn(0.0, 0.25-coeff, image, pos);
+        vec3 column2 = getColumn(0.25, 0.5-coeff, image, pos);
+        vec3 column3 = getColumn(0.5, 0.75-coeff, image, pos);
+        vec3 column4 = getColumn(0.75, 1.-coeff, image, pos);
 
-        vec3 column1p = (step(coeff, pos.x) * image) - (step(0.25, pos.x) * image);
-        vec3 column2p = (step(0.25+coeff, pos.x) * image) - (step(0.5, pos.x) * image);
-        vec3 column3p = (step(0.5+coeff, pos.x) * image) - (step(0.75, pos.x) * image);
-        vec3 column4p = (step(0.75+coeff, pos.x) * image)- (step(1., pos.x) * image);
+        vec3 column1p = getColumn(coeff, 0.25, image, pos);
+        vec3 column2p = getColumn(0.25+coeff, 0.5, image, pos);
+        vec3 column3p = getColumn(0.5+coeff, 0.75, image, pos);
+        vec3 column4p = getColumn(0.75+coeff, 1., image, pos);
 
-        vec3 image11 = column1 - (step(0.25, pos.y) * column1);
-        vec3 image12 = (step(0.25, pos.y) * column1p) - (step(0.5, pos.y) * column1p);
-        vec3 image13 = (step(0.5, pos.y) * column1) - (step(0.75, pos.y) * column1);
-        vec3 image14 = (step(0.75, pos.y) * column1p) - (step(1., pos.y) * column1p);
+        vec3 image11 = getCell(0., .25, column1p, pos);
+        vec3 image12 = getCell(.25, .5, column1, pos);
+        vec3 image13 = getCell(.5, .75, column1p, pos);
+        vec3 image14 = getCell(.75, 1., column1, pos);
 
-        vec3 image21 = column2 - (step(0.25, pos.y) * column2);
-        vec3 image22 = (step(0.25, pos.y) * column2p) - (step(0.5, pos.y) * column2p);
-        vec3 image23 = (step(0.5, pos.y) * column2) - (step(0.75, pos.y) * column2);
-        vec3 image24 = (step(0.75, pos.y) * column2p) - (step(1., pos.y) * column2p);
+        vec3 image21 = getCell(0., .25, column2p, pos);
+        vec3 image22 = getCell(.25, .5, column2, pos);
+        vec3 image23 = getCell(.5, .75, column2p, pos);
+        vec3 image24 = getCell(.75, 1., column2, pos);
 
-        vec3 image31 = column3 - (step(0.25, pos.y) * column3);
-        vec3 image32 = (step(0.25, pos.y) * column3p) - (step(0.5, pos.y) * column3p);
-        vec3 image33 = (step(0.5, pos.y) * column3) - (step(0.75, pos.y) * column3);
-        vec3 image34 = (step(0.75, pos.y) * column3p) - (step(1., pos.y) * column3p);
+        vec3 image31 = getCell(0., .25, column3p, pos);
+        vec3 image32 = getCell(.25, .5, column3, pos);
+        vec3 image33 = getCell(.5, .75, column3p, pos);
+        vec3 image34 = getCell(.75, 1., column3, pos);
 
-        vec3 image41 = column4 - (step(0.25, pos.y) * column4);
-        vec3 image42 = (step(0.25, pos.y) * column4p) - (step(0.5, pos.y) * column4p);
-        vec3 image43 = (step(0.5, pos.y) * column4) - (step(0.75, pos.y) * column4);
-        vec3 image44 = (step(0.75, pos.y) * column4p) - (step(1., pos.y) * column4p);
+        vec3 image41 = getCell(0., .25, column4p, pos);
+        vec3 image42 = getCell(.25, .5, column4, pos);
+        vec3 image43 = getCell(.5, .75, column4p, pos);
+        vec3 image44 = getCell(.75, 1., column4, pos);
 
         vec3 resImage = image11+image12+image13+image14+image21+image22+image23+image24
                         +image31+image32+image33+image34+image41+image42+image43+image44;
