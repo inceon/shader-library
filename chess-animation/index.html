@@ -41,6 +41,7 @@
         vec2 pos = gl_FragCoord.xy / resolution.xy;
 
         vec3 image = texture2D(texture, pos).rgb;
+        image.rgb -= coeff * 2.;
 
         vec3 column1 = getColumn(0.0, 0.25-coeff, image, pos);
         vec3 column2 = getColumn(0.25, 0.5-coeff, image, pos);
